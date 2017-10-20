@@ -24,3 +24,7 @@
     transform: rotate(360deg);
   }
 }
+
+.RepoList-item {
+  cursor: pointer;
+}
