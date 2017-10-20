@@ -25,6 +25,7 @@
   }
 }
 
-.RepoList-item {
+.RepoList-item,
+.IssueList-item {
   cursor: pointer;
 }

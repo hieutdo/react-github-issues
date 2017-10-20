@@ -55,12 +55,20 @@ class App extends Component {
     );
   };
 
-  renderRepoList = repos => {
-    return <RepoList repos={repos} onRepoSelect={this.handleRepoSelect} />;
+  renderRepoList = () => {
+    const { repos, issues, selectedRepo } = this.state;
+    return (
+      <RepoList
+        repos={repos}
+        issues={issues}
+        selectedRepo={selectedRepo}
+        onRepoSelect={this.handleRepoSelect}
+      />
+    );
   };
 
   render() {
-    const { apiKey, repos } = this.state;
+    const { apiKey } = this.state;
 
     return (
       <div className="App">
@@ -69,7 +77,7 @@ class App extends Component {
           <h1 className="App-title">React Github Issues</h1>
         </header>
         <div className="container">
-          {apiKey ? this.renderRepoList(repos) : this.renderApiKeyInput()}
+          {apiKey ? this.renderRepoList() : this.renderApiKeyInput()}
         </div>
       </div>
     );
