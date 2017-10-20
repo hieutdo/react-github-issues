@@ -10,6 +10,10 @@ class App extends Component {
     apiKey: null,
   };
 
+  handleApiKeySubmit = apiKey => {
+    this.setState({ apiKey });
+  };
+
   render() {
     return (
       <div className="App">
@@ -18,7 +22,7 @@ class App extends Component {
           <h1 className="App-title">React Github Issues</h1>
         </header>
         <div className="container">
-          <ApiKeyInput />
+          <ApiKeyInput onSubmit={this.handleApiKeySubmit} />
         </div>
       </div>
     );
