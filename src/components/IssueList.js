@@ -3,16 +3,33 @@ import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 const SortableItem = SortableElement(({ issue }) => {
-  return <li className="list-group-item IssueList-item">{issue.title}</li>;
+  return (
+    <tr>
+      <td>{issue.number}</td>
+      <td>{issue.title}</td>
+      <td>{issue.state}</td>
+      <td>{issue.updated_at}</td>
+    </tr>
+  );
 });
 
 const SortableList = SortableContainer(({ issues }) => {
   return (
-    <ul className="list-group list-group-flush">
-      {issues.map((issue, index) => (
-        <SortableItem key={issue.id} issue={issue} index={index} />
-      ))}
-    </ul>
+    <table className="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>State</th>
+          <th>Updated At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {issues.map((issue, index) => (
+          <SortableItem key={issue.id} issue={issue} index={index} />
+        ))}
+      </tbody>
+    </table>
   );
 });
 
