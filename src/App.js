@@ -14,6 +14,29 @@ const http = axios.create({
   baseURL: 'https://api.github.com',
 });
 
+const sortIssues = (oldIndex, newIndex) => state => {
+  const issues = arrayMove(state.issues, oldIndex, newIndex);
+  const issueIds = issues.map(i => i.id);
+  localStorage.setItem(`repo-${state.selectedRepo.id}`, issueIds);
+  return { issues };
+};
+
+const reorderIssues = issues => state => {
+  if (state.selectedRepo) {
+    const repoId = `repo-${state.selectedRepo.id}`;
+    const lsIssueIds = localStorage.getItem(repoId);
+    if (lsIssueIds) {
+      const issueMap = issues.reduce((map, issue) => {
+        map[issue.id] = issue;
+        return map;
+      }, {});
+      const issueIds = lsIssueIds.split(',');
+      return { issues: issueIds.map(id => issueMap[id]) };
+    }
+  }
+  return { issues };
+};
+
 class App extends Component {
   state = {
     apiKey: null,
@@ -34,22 +57,21 @@ class App extends Component {
   };
 
   handleIssueSorting = ({ oldIndex, newIndex }) => {
-    this.setState(state => ({
-      // use functional setState to make sure we can get latest this.state
-      issues: arrayMove(state.issues, oldIndex, newIndex),
-    }));
+    this.setState(sortIssues(oldIndex, newIndex));
   };
 
   fetchRepos = () => {
-    http.get(`/user/repos?per_page=${GITHUB_REPO_PER_PAGE}`).then(response => {
-      this.setState({ repos: response.data });
-    });
+    http
+      .get(`/user/repos?per_page=${GITHUB_REPO_PER_PAGE}`)
+      .then(({ data: repos }) => {
+        this.setState({ repos });
+      });
   };
 
   fetchRepoIssues = repo => {
     const issuesUrl = repo['issues_url'].replace(/\{\/number\}$/, '');
-    http.get(issuesUrl).then(response => {
-      this.setState({ issues: response.data });
+    http.get(issuesUrl).then(({ data: issues }) => {
+      this.setState(reorderIssues(issues));
     });
   };
 
