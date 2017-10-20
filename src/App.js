@@ -45,6 +45,20 @@ class App extends Component {
     });
   };
 
+  renderApiKeyInput = () => {
+    return (
+      <div className="row">
+        <div className="col-6 mx-auto">
+          <ApiKeyInput onSubmit={this.handleApiKeySubmit} />
+        </div>
+      </div>
+    );
+  };
+
+  renderRepoList = repos => {
+    return <RepoList repos={repos} onRepoSelect={this.handleRepoSelect} />;
+  };
+
   render() {
     const { apiKey, repos } = this.state;
 
@@ -55,11 +69,7 @@ class App extends Component {
           <h1 className="App-title">React Github Issues</h1>
         </header>
         <div className="container">
-          {apiKey ? (
-            <RepoList repos={repos} onSelect={this.handleRepoSelect} />
-          ) : (
-            <ApiKeyInput onSubmit={this.handleApiKeySubmit} />
-          )}
+          {apiKey ? this.renderRepoList(repos) : this.renderApiKeyInput()}
         </div>
       </div>
     );
