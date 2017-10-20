@@ -8,6 +8,7 @@ function RepoList({
   issues = [],
   selectedRepo = null,
   onRepoSelect = f => f,
+  onIssueSortEnd = f => f,
 }) {
   return (
     <div className="row">
@@ -29,7 +30,7 @@ function RepoList({
       </div>
       <div className="col-8">
         {selectedRepo ? (
-          <IssueList issues={issues} />
+          <IssueList issues={issues} onSortEnd={onIssueSortEnd} />
         ) : (
           <div className="alert alert-secondary">No repositories selected!</div>
         )}

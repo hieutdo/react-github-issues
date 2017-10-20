@@ -2,6 +2,7 @@ import './App.css';
 
 import axios from 'axios';
 import React, { Component } from 'react';
+import { arrayMove } from 'react-sortable-hoc';
 
 import ApiKeyInput from './components/ApiKeyInput';
 import RepoList from './components/RepoList';
@@ -30,6 +31,13 @@ class App extends Component {
   handleRepoSelect = repo => {
     this.fetchRepoIssues(repo);
     this.setState({ selectedRepo: repo });
+  };
+
+  handleIssueSorting = ({ oldIndex, newIndex }) => {
+    this.setState(state => ({
+      // use functional setState to make sure we can get latest this.state
+      issues: arrayMove(state.issues, oldIndex, newIndex),
+    }));
   };
 
   fetchRepos = () => {
@@ -63,6 +71,7 @@ class App extends Component {
         issues={issues}
         selectedRepo={selectedRepo}
         onRepoSelect={this.handleRepoSelect}
+        onIssueSortEnd={this.handleIssueSorting}
       />
     );
   };
